@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.13.6",
     "axois": "^0.0.1-security",
     "formik": "^2.4.9",
     "modern-normalize": "^3.0.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-paginate": "^8.3.0",
     "yup": "^1.7.1"
   },
   "devDependencies": {

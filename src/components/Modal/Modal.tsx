@@ -1,6 +1,12 @@
-import css from './Modal.module.css'
+import css from './Modal.module.css';
+import { createPortal } from 'react-dom';
 
-export default function Modal() {
+interface ModalProps {
+  children: React.ReactNode;
+  onClose: () => void;
+}
+
+export default function Modal({ children, onClose }: ModalProps) {
   return (
 
 <div
@@ -9,8 +15,9 @@ export default function Modal() {
   aria-modal="true"
 >
   <div className={css.modal}>
-    {/* */}
+    {children}
   </div>
 </div>
+document.getElementById('modal-root') as HTMLDivElement,
   )
 }
