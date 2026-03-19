@@ -5,10 +5,15 @@ export interface Note {
   tag: "Todo" | "Work" | "Personal";
 }
 
-export interface FetchNotesResponse {
+export interface CreateNoteData {
   title: string;
   content: string;
-  tag: "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
+  tag: "Todo" | "Work" | "Personal";
+}
+
+export interface FetchNotesResponse {
+  notes: Note[];
+  totalPages: number;
 }
 
 // export interface NoteListProps {

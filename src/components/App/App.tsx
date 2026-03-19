@@ -21,28 +21,29 @@ export default function App() {
 	});
 
   return (
-<div className={css.app}>
-	<header className={css.toolbar}>
-		{<SearchBox />}
+	<div className={css.app}>
+		<header className={css.toolbar}>
+			{<SearchBox />}
+			{isSuccess
+				&& data.notes.length > 0 
+				? <Pagination totalPages={data.totalPages} currentPage={1} onPageChange={(nextPage) => console.log('Selected page:', nextPage)} />
+				: null}
+			{isLoading && <strong className={css.message}>Loading...</strong>}
+			{<button className={css.button} onClick={openModal}>
+				Create note +
+			</button>}
+		</header>
 		{isSuccess
-	&& notes.length > 0 
-	? <Pagination pageCount={10} onPageChange={(selectedItem) => console.log('Selected page:', selectedItem.selected)} />
-	: null}
-	    {isLoading && <strong className={css.message}>Loading...</strong>}
-		{<button className={css.button} onClick={openModal}>
-			Create note +
-		</button>}
-    </header>
-	{isSuccess
-	&& notes.length > 0 
-	? <NoteList notes={notes || []} onDelete={(id) => console.log('Delete note with id:', id)}
-	 />
-	: <p className={css.message}>{error ? 'Error fetching notes' : 'No notes found'}</p>}
+			&& data.notes.length > 0 
+			? <NoteList notes={notes || []} onDelete={(id) => console.log('Delete note with id:', id)}
+			/>
+			: <p className={css.message}>{error ? 'Error fetching notes' : 'No notes found'}</p>
+		}
 
-	{isModalOpen && (
-		<Modal >
-			<NoteForm onClose={closeModal} onSuccess={(data) => console.log('Create note with data:', data)} />
-		</Modal>
-	)}
-</div>
+		{isModalOpen && (
+			<Modal >
+				<NoteForm onClose={closeModal} onSuccess={(data) => console.log('Create note with data:', data)} />
+			</Modal>
+		)}
+	</div>
   )}
