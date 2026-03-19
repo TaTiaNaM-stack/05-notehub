@@ -9,22 +9,14 @@ interface PaginationProps {
 export default function Pagination({ pageCount, onPageChange }: PaginationProps) {
   return (
     <ReactPaginate
-        // previousLabel={'Previous'}
-        // nextLabel={'Next'}
-        breakLabel={'...'}
-        breakClassName={css.break}
-        // pageCount={pageCount}
-        // marginPagesDisplayed={2}
-        // pageRangeDisplayed={5}
-        // onPageChange={onPageChange}
-        // containerClassName={css.pagination}
-        pageClassName={css.page}
-        pageLinkClassName={css.pageLink}
-        previousClassName={css.previous}
-        previousLinkClassName={css.previousLink}
-        nextClassName={css.next}
-        nextLinkClassName={css.nextLink}
-        // activeClassName={css.active}
+        previousLabel={'Previous'}
+        nextLabel={'Next'}
+        pageCount={pageCount}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={onPageChange}
+        containerClassName={css.pagination}
+        activeClassName={css.active}
     />
   );
 }
