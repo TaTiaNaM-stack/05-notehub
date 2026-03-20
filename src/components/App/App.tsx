@@ -20,14 +20,22 @@ export default function App() {
 		queryFn: () => fetchNotes(),
 	});
 
+	const handleSubmit = async (query: string) => {
+		console.log('Search query:', query);
+		// Implement search functionality here, e.g., refetch notes with the search query
+	};
+
   return (
 	<div className={css.app}>
 		<header className={css.toolbar}>
-			<SearchBox />
+			<SearchBox onSubmit={handleSubmit} />
 			{isSuccess
-				&& notes.notes.length > 0 
-				? <Pagination totalPages={notes.totalPages} currentPage={1} onPageChange={(nextPage) => console.log('Selected page:', nextPage)} />
-				: null}
+				&& notes?.notes.length > 0 
+				&& <Pagination 
+					totalPages={notes.totalPages} 
+					currentPage={1} 
+					onPageChange={(nextPage) => console.log('Selected page:', nextPage)}
+				 />}
 			{isLoading && <strong className={css.message}>Loading...</strong>}
 			{<button className={css.button} onClick={openModal}>
 				Create note +
