@@ -1,9 +1,9 @@
-import type { FetchNotesResponse } from '../../types/note';
+import type { Note } from '../../types/note';
 import {createNote} from '../../services/noteService';
 import css from './NoteForm.module.css'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { object, string } from 'yup';
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 const validationSchema = object({
   title: string()
@@ -17,20 +17,31 @@ const validationSchema = object({
 });
 
 interface NoteFormProps {
-  onSuccess: (data: FetchNotesResponse) => void;
+  onSuccess: (data: Note) => void;
   onClose: () => void;
 }
 
 export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
+  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: createNote,
-    onSuccess: () => {
-      onSuccess();
-      onError: (error) => {
-        console.error(error)
-      };
-}})
+    onSuccess: (data: Note) => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      onSuccess(data);
+      onClose();
+    },
+    onError: (error) => {
+      console.error('Error creating note:', error);
+      }
+  });
 
+  const handleCreateTodo = () => {
+      mutate({
+        title: "",
+        content: "",
+        tag: "Todo",
+      })
+    };
 
   return (
     <Formik
@@ -41,7 +52,7 @@ export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
-        onSuccess(values as FetchNotesResponse);
+        onSuccess(values as Note);
         setSubmitting(false);
       }}
     >
@@ -93,7 +104,7 @@ export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
             type="submit"
             className={css.submitButton}
             disabled={false}
-            onClick={onClose}
+            onClick={handleCreateTodo}
           >
             Create note
           </button>

@@ -2,19 +2,23 @@ export interface Note {
   id: string;
   title: string;
   content: string;
-  tag: "Todo" | "Work" | "Personal";
+  tag: NoteTag;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateNoteData {
   title: string;
   content: string;
-  tag: "Todo" | "Work" | "Personal";
+  tag: NoteTag;
 }
 
 export interface FetchNotesResponse {
   notes: Note[];
   totalPages: number;
 }
+
+export type NoteTag = "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
 
 // export interface NoteListProps {
 //   notes: Note[];

@@ -23,10 +23,10 @@ export default function App() {
   return (
 	<div className={css.app}>
 		<header className={css.toolbar}>
-			{<SearchBox />}
+			<SearchBox />
 			{isSuccess
-				&& data.notes.length > 0 
-				? <Pagination totalPages={data.totalPages} currentPage={1} onPageChange={(nextPage) => console.log('Selected page:', nextPage)} />
+				&& notes.notes.length > 0 
+				? <Pagination totalPages={notes.totalPages} currentPage={1} onPageChange={(nextPage) => console.log('Selected page:', nextPage)} />
 				: null}
 			{isLoading && <strong className={css.message}>Loading...</strong>}
 			{<button className={css.button} onClick={openModal}>
@@ -34,14 +34,14 @@ export default function App() {
 			</button>}
 		</header>
 		{isSuccess
-			&& data.notes.length > 0 
-			? <NoteList notes={notes || []} onDelete={(id) => console.log('Delete note with id:', id)}
+			&& notes.notes.length > 0 
+			? <NoteList notes={notes.notes} onDelete={(id) => console.log('Delete note with id:', id)}
 			/>
 			: <p className={css.message}>{error ? 'Error fetching notes' : 'No notes found'}</p>
 		}
 
 		{isModalOpen && (
-			<Modal >
+			<Modal onClick={closeModal}>
 				<NoteForm onClose={closeModal} onSuccess={(data) => console.log('Create note with data:', data)} />
 			</Modal>
 		)}
