@@ -4,6 +4,7 @@ import css from './NoteForm.module.css'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { object, string } from 'yup';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
 
 const validationSchema = object({
   title: string()
@@ -35,13 +36,11 @@ export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
       }
   });
 
-  const handleCreateTodo = () => {
-      mutate({
-        title: "",
-        content: "",
-        tag: "Todo",
-      })
+  const handleSubmit = (values: Note, actions) => {
+      mutate(values);
+      actions.resetForm();
     };
+
 
   return (
     <Formik
@@ -51,10 +50,7 @@ export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
         tag: 'Todo'
       }}
       validationSchema={validationSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        onSuccess(values as Note);
-        setSubmitting(false);
-      }}
+      onSubmit={handleSubmit}
     >
       <Form className={css.form}>     
         <div className={css.formGroup}>
@@ -104,7 +100,7 @@ export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
             type="submit"
             className={css.submitButton}
             disabled={false}
-            onClick={handleCreateTodo}
+            onClick={onClose}
           >
             Create note
           </button>

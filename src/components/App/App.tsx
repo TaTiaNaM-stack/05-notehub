@@ -2,7 +2,7 @@ import css from './App.module.css';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
-// import { Note } from '../../types';
+import { useDebouncedCallback } from 'use-debounce';
 import Modal from '../Modal/Modal.tsx';
 import NoteForm from '../NoteForm/NoteForm';
 import NoteList from '../NoteList/NoteList';
@@ -11,24 +11,30 @@ import SearchBox from '../SearchBox/SearchBox.tsx';
 
 
 export default function App() {
+	const [searchQuery, setSearchQuery] = useState('');
+
+//   const updateSearchQuery = useDebouncedCallback(
+//     (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value),
+//     300
+//   );
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
 
 	const { data: notes, isSuccess, isLoading, error } = useQuery({
-		queryKey: ['notes'],
-		queryFn: () => fetchNotes(),
+		queryKey: ['notes', searchQuery],
+		queryFn: () => fetchNotes(searchQuery),
 	});
 
-	const handleSubmit = async (query: string) => {
-		console.log('Search query:', query);
-		// Implement search functionality here, e.g., refetch notes with the search query
-	};
+	const debouncedSearch = useDebouncedCallback ((value: string) => {
+		setSearchQuery(value);
+		
+	}, 1000);
 
   return (
 	<div className={css.app}>
 		<header className={css.toolbar}>
-			<SearchBox onSubmit={handleSubmit} />
+			<SearchBox defaultValue={searchQuery} onSubmit={debouncedSearch} />
 			{isSuccess
 				&& notes?.notes.length > 0 
 				&& <Pagination 
