@@ -1,6 +1,6 @@
 import css from './App.module.css';
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
 import { useDebouncedCallback } from 'use-debounce';
 import Modal from '../Modal/Modal.tsx';
@@ -8,15 +8,13 @@ import NoteForm from '../NoteForm/NoteForm';
 import NoteList from '../NoteList/NoteList';
 import Pagination from '../Pagination/Pagination';
 import SearchBox from '../SearchBox/SearchBox.tsx';
+import type { Note } from '../../types/note.ts';
 
 
 export default function App() {
 	const [searchQuery, setSearchQuery] = useState('');
+	const [currentPage, setCurrentPage] = useState(1);
 
-//   const updateSearchQuery = useDebouncedCallback(
-//     (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value),
-//     300
-//   );
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
@@ -24,23 +22,25 @@ export default function App() {
 	const { data: notes, isSuccess, isLoading, error } = useQuery({
 		queryKey: ['notes', searchQuery],
 		queryFn: () => fetchNotes(searchQuery),
+		enabled: searchQuery !== "",
+		placeholderData: keepPreviousData,
 	});
 
 	const debouncedSearch = useDebouncedCallback ((value: string) => {
 		setSearchQuery(value);
-		
+		setCurrentPage(1);
 	}, 1000);
 
   return (
 	<div className={css.app}>
 		<header className={css.toolbar}>
-			<SearchBox defaultValue={searchQuery} onSubmit={debouncedSearch} />
+			<SearchBox searchQuery={searchQuery} onSubmit={debouncedSearch} />
 			{isSuccess
 				&& notes?.notes.length > 0 
 				&& <Pagination 
 					totalPages={notes.totalPages} 
-					currentPage={1} 
-					onPageChange={(nextPage) => console.log('Selected page:', nextPage)}
+					currentPage={currentPage} 
+					onPageChange={({ selected }) => setCurrentPage(selected + 1)}
 				 />}
 			{isLoading && <strong className={css.message}>Loading...</strong>}
 			{<button className={css.button} onClick={openModal}>
@@ -49,14 +49,13 @@ export default function App() {
 		</header>
 		{isSuccess
 			&& notes.notes.length > 0 
-			? <NoteList notes={notes.notes} onDelete={(id) => console.log('Delete note with id:', id)}
-			/>
+			? <NoteList notes={notes.notes} onDelete={(note: Note) => console.log('Delete note with id:', note.id)} />
 			: <p className={css.message}>{error ? 'Error fetching notes' : 'No notes found'}</p>
 		}
 
 		{isModalOpen && (
 			<Modal onClick={closeModal}>
-				<NoteForm onClose={closeModal} onSuccess={(data) => console.log('Create note with data:', data)} />
+				<NoteForm onClose={closeModal} onSuccess={(data: Note) => console.log('Create note with data:', data)} />
 			</Modal>
 		)}
 	</div>

@@ -1,10 +1,10 @@
 import type { Note } from '../../types/note';
 import {createNote} from '../../services/noteService';
 import css from './NoteForm.module.css'
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage, type FormikHelpers } from 'formik';
 import { object, string } from 'yup';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
+import type {CreateNoteData} from '../../types/note';
 
 const validationSchema = object({
   title: string()
@@ -36,7 +36,7 @@ export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
       }
   });
 
-  const handleSubmit = (values: Note, actions) => {
+  const handleSubmit = (values: CreateNoteData, actions: FormikHelpers<CreateNoteData>) => {
       mutate(values);
       actions.resetForm();
     };
