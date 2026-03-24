@@ -36,11 +36,16 @@ export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
       }
   });
 
-  const handleSubmit = (values: CreateNoteData, actions: FormikHelpers<CreateNoteData>) => {
+  const button = document.getElementById('create');
+  if (button) {
+    button.addEventListener('click', onClose);
+  }
+
+  const handleSubmit = (values: CreateNoteData, actions: FormikHelpers<CreateNoteData>, e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
       mutate(values);
       actions.resetForm();
     };
-
 
   return (
     <Formik
@@ -98,6 +103,7 @@ export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
           </button>
           <button
             type="submit"
+            id="create"
             className={css.submitButton}
             disabled={false}
             onClick={onClose}

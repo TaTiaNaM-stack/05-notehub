@@ -10,7 +10,6 @@ import Pagination from '../Pagination/Pagination';
 import SearchBox from '../SearchBox/SearchBox.tsx';
 import type { Note } from '../../types/note.ts';
 
-
 export default function App() {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
@@ -20,8 +19,8 @@ export default function App() {
 	const closeModal = () => setIsModalOpen(false);
 
 	const { data: notes, isSuccess, isLoading, error } = useQuery({
-		queryKey: ['notes', searchQuery],
-		queryFn: () => fetchNotes(searchQuery),
+		queryKey: ['notes', currentPage, searchQuery],
+		queryFn: () => fetchNotes(searchQuery, currentPage),
 		enabled: searchQuery !== "",
 		placeholderData: keepPreviousData,
 	});
@@ -40,7 +39,7 @@ export default function App() {
 				&& <Pagination 
 					totalPages={notes.totalPages} 
 					currentPage={currentPage} 
-					onPageChange={({ selected }) => setCurrentPage(selected + 1)}
+					onPageChange={( selected ) => setCurrentPage(selected + 1)}
 				 />}
 			{isLoading && <strong className={css.message}>Loading...</strong>}
 			{<button className={css.button} onClick={openModal}>
