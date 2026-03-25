@@ -22,29 +22,21 @@ interface NoteFormProps {
   onClose: () => void;
 }
 
-export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
+export default function NoteForm({ onClose }: NoteFormProps) {
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: createNote,
     onSuccess: (data: Note) => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
-      onSuccess(data);
-      onClose();
     },
     onError: (error) => {
       console.error('Error creating note:', error);
       }
   });
 
-  const button = document.getElementById('create');
-  if (button) {
-    button.addEventListener('click', onClose);
-  }
-
-  const handleSubmit = (values: CreateNoteData, actions: FormikHelpers<CreateNoteData>, e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  const handleSubmit = (values: CreateNoteData, { resetForm }: FormikHelpers<NoteFormProps>) => {
       mutate(values);
-      actions.resetForm();
+      resetForm();
     };
 
   return (
@@ -102,7 +94,7 @@ export default function NoteForm({ onSuccess, onClose }: NoteFormProps) {
             Cancel
           </button>
           <button
-            type="submit"
+            type="button"
             id="create"
             className={css.submitButton}
             disabled={false}
