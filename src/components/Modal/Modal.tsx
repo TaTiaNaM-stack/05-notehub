@@ -4,14 +4,14 @@ import { useEffect } from 'react';
 
 interface ModalProps {
   children: React.ReactNode;
-  onClick: () => void;
+  onClose: () => void;
 }
 
-export default function Modal({ children, onClick }: ModalProps) {
+export default function Modal({ children, onClose }: ModalProps) {
   useEffect(() => {
 	  const handleKeyDown = (e: KeyboardEvent) => {
 	    if (e.key === "Escape") {
-	      onClick();
+	      onClose();
 	    }
 	  };
 	
@@ -22,10 +22,10 @@ export default function Modal({ children, onClick }: ModalProps) {
 	    document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
 	  };
-	}, [onClick]);
-   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+	}, [onClose]);
+   const handleBackdropClose = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
-      onClick();
+      onClose();
     }
   };
 
@@ -35,7 +35,7 @@ export default function Modal({ children, onClick }: ModalProps) {
         className={css.backdrop}
         role="dialog"
         aria-modal="true"
-        onClick={handleBackdropClick}
+        onClick={handleBackdropClose}
       >
       <div className={css.modal}>
         {children}

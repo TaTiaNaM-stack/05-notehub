@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface NoteListProps {
   notes: Note[];
-  onDelete: (note: Note) => void;
 }
 
 export default function NoteList({ notes }: NoteListProps) {

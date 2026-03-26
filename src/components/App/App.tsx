@@ -8,7 +8,7 @@ import NoteForm from '../NoteForm/NoteForm';
 import NoteList from '../NoteList/NoteList';
 import Pagination from '../Pagination/Pagination';
 import SearchBox from '../SearchBox/SearchBox.tsx';
-import type { Note } from '../../types/note.ts';
+
 
 export default function App() {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -21,7 +21,6 @@ export default function App() {
 	const { data: notes, isSuccess, isLoading, error } = useQuery({
 		queryKey: ['notes', currentPage, searchQuery],
 		queryFn: () => fetchNotes(searchQuery, currentPage),
-		enabled: searchQuery !== "",
 		placeholderData: keepPreviousData,
 	});
 
@@ -29,7 +28,7 @@ export default function App() {
 		setSearchQuery(value);
 		setCurrentPage(1);
 	}, 1000);
-
+	
   return (
 	<div className={css.app}>
 		<header className={css.toolbar}>
@@ -39,7 +38,7 @@ export default function App() {
 				&& <Pagination 
 					totalPages={notes.totalPages} 
 					currentPage={currentPage} 
-					onPageChange={( selected ) => setCurrentPage(selected + 1)}
+					onPageChange={( selected ) => setCurrentPage(selected)}
 				 />}
 			{isLoading && <strong className={css.message}>Loading...</strong>}
 			{<button className={css.button} onClick={openModal}>
@@ -48,12 +47,12 @@ export default function App() {
 		</header>
 		{isSuccess 
 			&& notes.notes.length > 0 
-			? <NoteList notes={notes.notes} onDelete={(note: Note) => console.log('Delete note with id:', note.id)} />
+			? <NoteList notes={notes.notes} />
 			: <p className={css.message}>{error ? 'Error fetching notes' : 'No notes found'}</p>
 		}
 
 		{isModalOpen && (
-			<Modal onClick={closeModal}>
+			<Modal onClose={closeModal}>
 				<NoteForm onClose={closeModal} />
 			</Modal>
 		)}

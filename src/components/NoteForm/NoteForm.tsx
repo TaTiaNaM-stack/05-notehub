@@ -1,7 +1,6 @@
-// import type { Note } from '../../types/note';
 import {createNote} from '../../services/noteService';
 import css from './NoteForm.module.css'
-import { Formik, Form, Field, ErrorMessage, type FormikHelpers } from 'formik';
+import { Formik, Form, Field, ErrorMessage, type FormikHelpers, useFormik } from 'formik';
 import { object, string } from 'yup';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import type {CreateNoteData} from '../../types/note';
@@ -27,15 +26,23 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     mutationFn: createNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
+      formik.resetForm();
+      onClose();
     },
     onError: (error) => {
       console.error('Error creating note:', error);
       }
   });
 
-  const handleSubmit = (values: CreateNoteData, { resetForm }: FormikHelpers<CreateNoteData>) => {
+  const formik = useFormik({
+  initialValues: { name: '' },
+  onSubmit: values => {
+    mutate (values);
+  },
+});
+
+  const handleSubmit = (values: CreateNoteData) => {
       mutate(values);
-      resetForm();
     };
 
   return (
@@ -93,7 +100,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
             Cancel
           </button>
           <button
-            type="button"
+            type="submit"
             id="create"
             className={css.submitButton}
             disabled={false}

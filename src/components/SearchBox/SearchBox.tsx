@@ -6,23 +6,24 @@ interface SearchBoxProps {
 }
 
 export default function SearchBox({ onSubmit, searchQuery }: SearchBoxProps ) {
-  const handleSubmit: (formData: FormData) => void = async (formData: FormData) => {
-        const query = (formData.get('query') as string).trim();
-        await onSubmit(query);
-      };
+  // const handleSubmit: (formData: FormData) => void = async (formData: FormData) => {
+  //       const query = (formData.get('query') as string).trim();
+  //       await onSubmit(query);
+  //     };
 const handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (e) => {
         onSubmit(e.target.value);
       }
 
   return (
-    <form action={handleSubmit}>
+
     <input
       className={css.input}
       type="text"
       placeholder="Search notes"
       defaultValue={searchQuery}
       onChange={handleChange}
+      // onSubmit={handleSubmit}
     />
-  </form>
+
   )
 }

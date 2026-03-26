@@ -1,11 +1,17 @@
 import axios from 'axios';
-import type { CreateNoteData, FetchNotesResponse, Note } from '../types/note';
-// import {searchQuery} from '../components/App/App';
+import type { CreateNoteData, Note } from '../types/note';
 
 const VITE_NOTEHUB_TOKEN = import.meta.env.VITE_NOTEHUB_TOKEN;
 
 axios.defaults.baseURL = 'https://notehub-public.goit.study/api';
 axios.defaults.headers.common['Authorization'] = `Bearer ${VITE_NOTEHUB_TOKEN}`;
+
+interface FetchNotesResponse {
+  notes: Note[];
+  totalPages: number;
+  page: number;
+  perPage: number;
+}
 
 export const fetchNotes = async (searchQuery: string, currentPage: number): Promise<FetchNotesResponse> => {
     const response = await axios.get<FetchNotesResponse>('/notes', {
@@ -23,6 +29,7 @@ export const createNote = async (newTodo: CreateNoteData): Promise<Note> => {
     return response.data;
 }
 
-export const deleteNote = async (id: string): Promise<void> => {
-    await axios.delete(`/notes/${id}`);
+export const deleteNote = async (id: string): Promise<Note> => {
+    const response = await axios.delete<Note>(`/notes/${id}`);
+    return response.data;
 }
