@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { CreateNoteData, FetchNotesResponse, Note } from '../types/note';
+// import {searchQuery} from '../components/App/App';
 
 const VITE_NOTEHUB_TOKEN = import.meta.env.VITE_NOTEHUB_TOKEN;
 

@@ -1,4 +1,4 @@
-import type { Note } from '../../types/note';
+// import type { Note } from '../../types/note';
 import {createNote} from '../../services/noteService';
 import css from './NoteForm.module.css'
 import { Formik, Form, Field, ErrorMessage, type FormikHelpers } from 'formik';
@@ -18,7 +18,6 @@ const validationSchema = object({
 });
 
 interface NoteFormProps {
-  onSuccess: (data: Note) => void;
   onClose: () => void;
 }
 
@@ -26,7 +25,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: createNote,
-    onSuccess: (data: Note) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
     },
     onError: (error) => {
@@ -34,7 +33,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
       }
   });
 
-  const handleSubmit = (values: CreateNoteData, { resetForm }: FormikHelpers<NoteFormProps>) => {
+  const handleSubmit = (values: CreateNoteData, { resetForm }: FormikHelpers<CreateNoteData>) => {
       mutate(values);
       resetForm();
     };

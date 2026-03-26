@@ -22,12 +22,6 @@ export interface FetchNotesResponse {
 
 export type NoteTag = "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
 
-// export interface NoteListProps {
-//   notes: Note[];
-//   onEdit: (note: Note) => void;
-//   onDelete: (id: string) => void;
-// }
-
 export interface UpdateNoteData {
   id: string;
   title: string;

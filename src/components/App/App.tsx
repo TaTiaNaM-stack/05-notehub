@@ -46,7 +46,7 @@ export default function App() {
 				Create note +
 			</button>}
 		</header>
-		{isSuccess
+		{isSuccess 
 			&& notes.notes.length > 0 
 			? <NoteList notes={notes.notes} onDelete={(note: Note) => console.log('Delete note with id:', note.id)} />
 			: <p className={css.message}>{error ? 'Error fetching notes' : 'No notes found'}</p>
@@ -54,7 +54,7 @@ export default function App() {
 
 		{isModalOpen && (
 			<Modal onClick={closeModal}>
-				<NoteForm onClose={closeModal} onSuccess={(data: Note) => console.log('Create note with data:', data)} />
+				<NoteForm onClose={closeModal} />
 			</Modal>
 		)}
 	</div>
