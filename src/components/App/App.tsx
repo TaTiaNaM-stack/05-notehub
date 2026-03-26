@@ -32,7 +32,7 @@ export default function App() {
   return (
 	<div className={css.app}>
 		<header className={css.toolbar}>
-			<SearchBox searchQuery={searchQuery} onSubmit={debouncedSearch} />
+			<SearchBox searchQuery={searchQuery} onChange={debouncedSearch} />
 			{isSuccess
 				&& notes?.notes.length > 0 
 				&& <Pagination 
