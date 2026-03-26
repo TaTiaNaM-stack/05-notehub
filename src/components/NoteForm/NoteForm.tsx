@@ -35,7 +35,6 @@ export default function NoteForm({ onClose }: NoteFormProps) {
 
   const handleSubmit = (values: CreateNoteData) => {
       mutate(values);
-      onClose();
     };
 
   return (
