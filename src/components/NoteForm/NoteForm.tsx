@@ -50,7 +50,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
       <Form className={css.form}>     
         <div className={css.formGroup}>
           <label htmlFor="title">Title</label>
-          <input id="title" type="text" name="title" className={css.input} />
+          <Field id="title" type="text" name="title" className={css.input} />
           <ErrorMessage component="span" name="title" className={css.error} />
         </div>
 
@@ -96,7 +96,6 @@ export default function NoteForm({ onClose }: NoteFormProps) {
             id="create"
             className={css.submitButton}
             disabled={false}
-            onClick={onClose}
           >
             Create note
           </button>
